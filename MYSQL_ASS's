@@ -86,7 +86,39 @@ create table Login_Details(
 
 
 Ass2---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+a)
 
+Modify the table Associate_Status to include following two columns:
+Column Name: Batch_Id
+Details: Batch Id from batch_Info
+Data Types: Character
+Size: 20
+ALTER TABLE batch_info MODIFY Batch_Id CHARACTER(20)
+
+
+
+b)
+
+Column Name: Trainer_Id
+Details: Trainer Id from trainer_Info
+Data Types: Character
+Size: 20
+ALTER TABLE trainer_info MODIFY Trainer_Id CHARACTER(20)
+
+
+c)
+
+Modify two columns data types of the table Associate_Status as follow
+Start_Date
+Desired Type: Date
+End_Date
+Desired Type: Date
+Deliverables Expected:
+New Columns in batch_Info & trainer_Info & changed column data types
+ALTER TABLE associate_status MODIFY Start_Date Date, modify End_Date Date
+
+
+d)
 
 CREATE TABLE Trainer_Info (
   Trainer_Id varchar(20),
@@ -100,6 +132,10 @@ CREATE TABLE Trainer_Info (
   Trainer_Password varchar(20)
 );
 
+
+
+Insert Data into Tables------------------------------------------
+-----------------------------------------------------------------
 Insert into Trainer_Info Values
 ('F001','Mr.','PANKAJ GHOSH','PUNE','JAVA','Bachelour of technology',12,'pankaj.Ghosh@alliance','fac1@123'),
 ('F002','Mr.','SANJAY RADHAKRISHNAN ','Banglore','Dotnet','Bachelour of technology',10,'Sanjay@alliance','fac2@123'),
@@ -272,29 +308,156 @@ Insert into Associate_Status values
 select * from Associate_Status;
 
 
+Ex-2.1
+-------------------------------------------------------------------------------
+Problem Statement:
+Change the password of trainer F004 from fac4@123 to nn4@123
+Deliverables Expected:
+Updated password of trainer F004
+
+Query:
+UPDATE `trainer_info` SET `Trainer_Password`='[nn4@123]' WHERE Trainer_Id = F004;
+
+
+
+
+Problem Statement:
+Remove following record form associate_status table
+A003,J2EE, B004,F004,2005-12-1,2005-12-25
+Deliverables Expected:
+Removed record from associate status.
+
+Query:
+DELETE FROM associate_status WHERE Associate_Id='A003' && Module_Id='J2EE' && Batch_Id='B004' && Trainer_Id='F004';
+
+
+
+
+Problem Statement:
+Fetch first five trainers who have maximum years of experience & display there details.
+Deliverables Expected:
+Top five experience trainers
+SELECT Trainer_Id,Module_Id,Batch_Id,MAX(End_Date-Start_Date)
+FROM associate_status
+ORDER BY Associate_Id;
+
+
+
+
+Problem Statement:
+Begin transaction & insert below to records into Login_Details
+'U001' Admin1@123
+'U002' Admin2@123	
+Query:
+
+INSERT INTO `login_details`(`User_Id`, `User_Password`) VALUES 
+('U001',' Admin1@123'),
+('U002',' Admin2@123');
+
+
+Problem:Perform rollback operation & verify whether any records are inserted in table or not.
+2 rows inserted. (Query took 0.0100 seconds.) [ROLLBACK occurred.]
 
 
 
 
 
+Problem Statement:
+Create a dummy user in database. Grant create & select table privilege to him/her.
+query:
+
+create user "<devil>" identified by "<royal>";
+grant create table to devil;
+grant select table to devil;
+
+
+
+Repeat the above all queries using login credentials of newly created user.
+Revoke the privilege assigned to this newly created user.
+Problem Statement:
+Remove table Login_Details from database.
+
+Query:
+
+revoke create table from devil;
+revoke select table from devil;
 
 
 
 
+Ass-4----------------------------------------------------------------------------------
+_______________________________________________________________________________________
+
+Problem Statement:
+Write a query to display trainer IDs for all associates whose names contain the letter 'i'. Note: Use sub-query to achieve this.
+
+Query:
+
+SELECT Trainer_Id
+  FROM associate_status
+  WHERE Associate_Id IN (SELECT Associate_Id
+                            FROM associate_info
+                            WHERE Associate_Name LIKE '%i%');
+
+Problem Statement:
+Write a query to display trainer IDs for all associates whose names do not contain the letter 'i'.
+Note: Use sub-query to achieve this.
+
+Query:
+
+SELECT Trainer_Id
+  FROM associate_status
+  WHERE Associate_Id NOT IN (SELECT Associate_Id
+                            FROM associate_info
+                            WHERE Associate_Name LIKE '%i%');
 
 
 
 
+Problem Statement:
+Write a query to pick up the maximum marks secured in the subject “EI05IP” and display the student name and registration number of the student who has secured it.
 
-4)
+Query:
 
-a&&b)
-
-
-a)Select Trainer_ID from Trainer_Info WHERE Associate_Name=(Select Associate_name from Associate_info where Associate_name LIKE '%i%');
+select Student_name, Registration_No, from Student_info where EI05IP =(select Max(EI05IP) from Student_info);
 
 
-b)Select Trainer_ID from Trainer_Info WHERE Associate_Name=(Select Associate_name from Associate_info where Associate_name NOT LIKE '%i%');
+
+Problem Statement:
+Write a query to display the student name and registration number of the student who has secured second highest marks in the subject El05lP subject.
+
+Query:
+
+select Student_name, Registration_No, from Student_group by salary 
+order by EI05IP  desc limit 1,1;
+
+
+Joins
+Exercise 1
+Problem Statement:
+Write a query to display trainer_id and batch_id details in such a way that we get all possible combinations of trainer IDs and batch IDs.
+Hint: Use Trainer_Info and Batch_Info tables.
+
+Query:
+
+select trainer_info.trainer_id,batch_info.batch_id from trainer_info cross join  batch_info;
+
+
+Problem Statement:
+Write a query to display the records from all columns of tables associate_status and batch_info, wherever the batch_id in the two tables matches.
+
+Query:
+
+select associate_status.,batch_info. from associate_status inner join 
+batch_info on associate_status.batch_id = batch_info.batch_id
+
+
+Problem Statement:
+Write a query to display the associate IDs of the associates tagged to trainers and all the trainer IDs irrespective of whether there are any associates tagged to them or not. Hint: Use associate_status and trainer_info tables.
+Note: Use Left Outer Join
+
+
+
 
 
 
